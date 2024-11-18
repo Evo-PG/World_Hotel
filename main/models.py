@@ -29,10 +29,6 @@ class HotelRoom(models.Model):
         upload_to="media/hotel_cover",
         verbose_name="иконка"
     )
-    photo_hotel_room = models.ImageField(
-        upload_to="media/photo_hotel_room",
-        verbose_name="фото номкра"
-    )
     description = models.TextField(
         verbose_name="описание"
     )
@@ -53,12 +49,34 @@ class HotelRoom(models.Model):
             (2,"Занят"),
         )
     )
-
+    create_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
+    update_date = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата изменения"
+    )
 
     class Meta:
         verbose_name = "Номер"
         verbose_name_plural = "Намера"
 
+class HotelRoomImage(models.Model):
+    hotel_room = models.ForeignKey(
+        HotelRoom,
+        on_delete=models.CASCADE,
+        related_name="image",
+        verbose_name="фото номера"
+    )
+    image = models.ImageField(
+        upload_to="media/photo_hotel_room",
+        verbose_name="фото"
+    )
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
 
 class Services(models.Model):
     title = models.CharField(
@@ -72,7 +90,14 @@ class Services(models.Model):
     description = models.TextField(
         verbose_name="полное описание"
     )
-
+    create_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
+    update_date = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата изменения"
+    )
     class Meta:
         verbose_name = "Сервис"
         verbose_name_plural = "Сервисы"
