@@ -4,14 +4,14 @@ from django.views.generic import ListView
 
 
 def index_viu(request):
-    hotel_room = HotelRoom.objects.all().exclude(status=1).order_by('-id')[:3]
+    hotel_rooms = HotelRoom.objects.all()
     services = Services.objects.all()
 
     return render(
         request=request,
         template_name='main/index.html',
         context={
-            "hotel_room":hotel_room,
+            "hotel_rooms":hotel_rooms,
             "services":services
         }
     )
