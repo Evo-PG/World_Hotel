@@ -66,7 +66,7 @@ class HotelRoomImage(models.Model):
     hotel_room = models.ForeignKey(
         HotelRoom,
         on_delete=models.CASCADE,
-        related_name="image",
+        related_name="image_hotel",
         verbose_name="фото номера"
     )
     image = models.ImageField(

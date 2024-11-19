@@ -1,0 +1,73 @@
+{% extends 'radical.html' %}
+{% load static %}
+
+{% block contend %}
+<style>
+    /* Убираем промежутки между изображениями и выравниваем их */
+    .image-frame {
+        border: 3px solid #ddd; /* Рамка вокруг изображения */
+        padding: 0; /* Убираем отступы внутри рамки */
+        border-radius: 8px; /* Округление углов */
+        display: block; /* Убираем возможные пробелы между изображениями */
+        width: 100%; /* Убедитесь, что изображения занимают 100% ширины контейнера */
+    }
+
+    /* Контейнер с изображениями */
+    .image-container {
+        display: grid; /* Используем grid для точного контроля */
+        grid-template-columns: repeat(2, 1fr); /* Два столбца */
+        gap: 0; /* Убираем промежутки между изображениями */
+    }
+
+    /* Стиль для каждого изображения */
+    .image-item {
+        padding: 5px; /* Легкий отступ между изображениями */
+    }
+
+    /* Для маленьких изображений можно настроить их размеры */
+    .image-small {
+        width: 100%; /* Изображения будут занимать всю ширину ячейки */
+        height: auto; /* Автоматическая высота для сохранения пропорций */
+    }
+</style>
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url('{{ hotel_room_ditail.cover.url }}');">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Номер комнаты: {{ hotel_room_ditail.number_room_hotel }}</h1> <!-- отображение названия объекта -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">главная</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">детальная</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Booking Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title text-center text-primary text-uppercase">Категория</h6>
+            <h1 class="mb-5"><span class="text-primary text-uppercase">{{ hotel_room_ditail.category }}</span></h1> <!-- категория объекта -->
+        </div>
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="image-container">
+                    {% for image in image_hotel_room %}
+                        <!-- Отображаем каждое изображение с нужным размером -->
+                        <div class="image-item">
+                            <img class="img-fluid rounded image-frame image-small wow zoomIn" data-wow-delay="0.1s" src="{{ image.image.url }}"> <!-- Изображение с маленьким размером -->
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Booking End -->
+
+{% endblock %}
