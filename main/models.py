@@ -90,6 +90,10 @@ class Services(models.Model):
     description = models.TextField(
         verbose_name="полное описание"
     )
+    cover = models.ImageField(
+        upload_to="media/photo_hotel_room",
+        verbose_name="икрнка"
+    )
     create_date = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата создания"
