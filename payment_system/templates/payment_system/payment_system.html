@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXhW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <style>
+    .carousel-container {
+      width: 500px;
+      height: 500px;
+      margin: auto;
+    }
+    .carousel-container .carousel-inner img {
+      height: 100%;
+      object-fit: cover;
+    }
+    .accordion-container {
+      width: 500px;
+      margin: auto;
+    }
+    .accordion-item {
+      display: none;
+    }
+    .accordion-body strong {
+    display: block;
+    text-indent: 20px; /* Устанавливаем красную строку */
+    margin-top: 10px; /* Дополнительное расстояние сверху, если нужно */
+  }
+  </style>
+</head>
+<body>
+<br>
+<button type="button" class="btn btn-outline-danger" onclick="window.location.href='{% url 'index' %}'">
+    Отменить покупку, и вернуться на главную
+</button>
+<center>
+  <div id="carouselExampleCaptions" class="carousel slide carousel-container">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    </div>
+    <div class="carousel-inner">
+      {% for payment_method in payment_methods %}
+      <div class="carousel-item{% if forloop.first %} active{% endif %}" data-index="{{ forloop.counter0 }}">
+        <img src="{{ payment_method.logo.url }}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <button class="btn btn-primary" onclick="showAccordion({{ forloop.counter0 }})">{{ payment_method.title }}</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <div class="accordion mt-3 accordion-container" id="accordionPanelsStayOpenExample">
+    {% for payment_method in payment_methods %}
+    <div class="accordion-item" id="accordion-{{ forloop.counter0 }}">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter0 }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter0 }}">
+          Способ оплаты: {{ payment_method.title }}
+        </button>
+      </h2>
+      <div id="collapse{{ forloop.counter0 }}" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <strong>Оплата через кюар код: </strong>
+          <img src="{{ payment_method.qr.url }}" class="d-block w-100" alt="...">
+          <strong>Или оплата через номер лицевого счота:</strong>
+          <strong>Номер счота: {{ payment_method.person_account }}</strong>
+          <br>
+          <form action="{% url 'payment_system' tour.id %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <label>Прикрепите чек:</label>
+              <input name="check" type="file" id="check" />
+
+              <!-- Способ оплаты -->
+              <input name="method_payment" type="text" id="method_payment" value="{{ payment_method.title }}" style="display: none;" />
+
+              <br><br>
+              <div class="one_half last">
+                  <button type="submit">Отправить запрос на проверку покупки билета</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+              {% if messages %}
+              <ul class="messages">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}{% endif %}
+                      {{ message }}
+                  </li>
+                  {% endfor %}
+              </ul>
+              {% endif %}
+  <script>
+    const accordions = document.querySelectorAll('.accordion-item');
+
+    function showAccordion(index) {
+      accordions.forEach((accordion, i) => {
+        // Отображаем только выбранный аккордеон
+        accordion.style.display = i === index ? 'block' : 'none';
+
+        // Закрываем все аккордеоны, а выбранный - раскрываем
+        const collapseElement = document.getElementById(`collapse${i}`);
+        if (i === index) {
+          new bootstrap.Collapse(collapseElement, { show: true });
+        } else {
+          new bootstrap.Collapse(collapseElement, { hide: true });
+        }
+      });
+    }
+
+    document.getElementById('carouselExampleCaptions').addEventListener('slide.bs.carousel', () => {
+      // Скрываем все аккордеоны при переключении слайда
+      accordions.forEach(accordion => accordion.style.display = 'none');
+    });
+
+    // При загрузке страницы не отображаем ни один аккордеон
+    accordions.forEach(accordion => accordion.style.display = 'none');
+  </script>
+</center>
+
+</body>
+</html>
