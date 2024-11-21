@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from user.forms import MyUserRegisterForms
 from .models import HotelRoom, Services, Category,HotelRoomImage
-
+from .forms import HotelRoomForms
 
 def index_viu(request):
 
@@ -33,3 +33,13 @@ def ditail_viu(request, pk):
         }
     )
 
+def add_hotel_room(request):
+    form = HotelRoomForms()
+
+    return render(
+        request=request,
+        template_name="main/create_hotel_room.html",
+        context={
+            "form":form
+        }
+    )

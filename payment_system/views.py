@@ -27,9 +27,9 @@ def payment_system_veu(request, pk):
             messages.error(request, "Вы забыли прикрепить чек")  # Используйте messages.error для ошибки
 
     return render(
-        request,
-        "payment_system/payment_system.html",
-        {
+        request=request,
+        template_name="payment_system/payment_system.html",
+        context={
             "payment_methods": payment_method,
             "tour": tour,
         }

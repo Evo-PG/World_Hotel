@@ -38,6 +38,31 @@
     body {
         padding-top: 112px; /* Убедитесь, что значение совпадает с высотой навбара */
     }
+    .form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #f28c28;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #d9771b;
+}
+
+.text-danger {
+    font-size: 12px;
+}
+
 </style>
 
 <body>
@@ -55,7 +80,7 @@
         <div class="row gx-0">
             <div class="col-lg-3 bg-dark d-none d-lg-block">
                 <a href="{% url 'index' %}" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
-                    <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
+                    <h1 class="m-0 text-primary text-uppercase">World Hotel</h1>
                 </a>
             </div>
             <div class="col-lg-9">
@@ -72,17 +97,14 @@
                     </div>
                 </div>
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
-                    <a href="index.html" class="navbar-brand d-block d-lg-none">
-                        <h1 class="m-0 text-primary text-uppercase">Hotelier</h1>
-                    </a>
                     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <a href="{% url 'index' %}" class="nav-item nav-link active">Главная</a>
                             <a href="about.html" class="nav-item nav-link">About</a>
-                            <a href="service.html" class="nav-item nav-link">Services</a>
+                            <a href="{% url 'create_hotel_room' %}" class="nav-item nav-link">Добавить номер</a>
                             <a href="room.html" class="nav-item nav-link">Rooms</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -120,6 +142,95 @@
         </div>
     </div>
     <!-- Header End -->
+
+<!-- Модальное окно регистрации -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Регистрация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'register_user' %}">
+                    {% csrf_token %}
+                    <!-- Отображение ошибок формы -->
+                    {% if register_form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ register_form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    <!-- Поля формы -->
+                    <div class="mb-3">
+                        <label for="id_phon_number" class="form-label">Номер телефона</label>
+                        {{ register_form.phon_number }}
+                        {% for error in register_form.phon_number.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email</label>
+                        {{ register_form.email }}
+                        {% for error in register_form.email.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_first_name" class="form-label">Имя</label>
+                        {{ register_form.first_name }}
+                        {% for error in register_form.first_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">Пароль</label>
+                        {{ register_form.password1 }}
+                        {% for error in register_form.password1.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password2" class="form-label">Подтверждение пароля</label>
+                        {{ register_form.password2 }}
+                        {% for error in register_form.password2.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <!-- Кнопка отправки -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Модальное окно входа -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Вход</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'login_user' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% block contend %}
 
