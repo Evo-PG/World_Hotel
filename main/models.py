@@ -14,7 +14,6 @@ class Category(models.Model):
         verbose_name_plural = "Категориии"
 
 
-
 class HotelRoom(models.Model):
     number_room_hotel = models.PositiveSmallIntegerField(
         verbose_name="число номера"
