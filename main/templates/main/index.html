@@ -5,10 +5,33 @@
   {% block contend %}
 
 <style>
+    /* Стили для изображения в сервисе */
     .room-item img {
         width: 100%;       /* Убедитесь, что картинка растягивается по ширине контейнера */
         height: 200px;     /* Устанавливаем фиксированную высоту для всех картинок */
         object-fit: cover; /* Обеспечиваем, чтобы изображение не искажалось */
+    }
+
+    /* Центрируем модальное окно по вертикали */
+    .modal-dialog {
+        display: flex;
+        align-items: center; /* Центрируем по вертикали */
+        justify-content: center; /* Центрируем по горизонтали */
+        min-height: 60vh; /* Минимальная высота модального окна (можно настроить по желанию) */
+        max-width: 60%; /* Максимальная ширина модального окна */
+        width: auto; /* Автоматическая ширина */
+        height: auto; /* Автоматическая высота */
+    }
+
+    /* Стили для контента внутри модального окна */
+    .modal-content {
+        width: 100%;
+        height: auto; /* Убираем фиксированную высоту */
+    }
+
+    /* Стили для тела модального окна */
+    .modal-body {
+        padding: 1.5rem; /* Добавляем отступы */
     }
 </style>
 
@@ -145,8 +168,7 @@
                                     </div>
                                     <p class="text-body mb-3">{{ room.description|truncatewords:15 }}</p>
                                     <div class="d-flex justify-content-between">
-                                        <a class="btn btn-sm btn-primary rounded py-2 px-4" href="#">View Detail</a>
-                                        <a class="btn btn-sm btn-dark rounded py-2 px-4" href="#">Book Now</a>
+                                        <a class="btn btn-sm btn-primary rounded py-2 px-4" href="{% url 'ditail' room.id %}">Детально</a>
                                     </div>
                                 </div>
                             </div>
@@ -174,33 +196,51 @@
             </div>
         <!-- Video Start -->
 
-
-        <!-- Service Start -->
-        <div class="container-xxl py-5">
-            <div class="container">
-                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Our Services</h6>
-                    <h1 class="mb-5">Explore Our <span class="text-primary text-uppercase">Services</span></h1>
-                </div>
-                <div class="row g-4">
-                    {% for service in services %}
-                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:0.01 }}s">
-                            <a class="service-item rounded" href="#">
-                                <div class="service-icon bg-transparent border rounded p-1">
-                                    <div class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                        <img class="w-100 h-100 fa fa-2x text-primary" src="{{ service.cover.url }}" ></img>
-                                    </div>
-                                </div>
-                                <h5 class="mb-3">{{ service.title }}</h5>
-                                <p class="text-body mb-0">{{ service.smol_description}}</p>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+<!-- Service Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title text-center text-primary text-uppercase">Our Services</h6>
+            <h1 class="mb-5">Explore Our <span class="text-primary text-uppercase">Services</span></h1>
         </div>
-        <!-- Service End -->
+        <div class="row g-4">
+            {% for service in services %}
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:0.01 }}s">
+                    <a class="service-item rounded" href="#" data-bs-toggle="modal" data-bs-target="#serviceModal{{ service.id }}">
+                        <div class="service-icon bg-transparent border rounded p-1">
+                            <div class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
+                                <img class="w-100 h-100 fa fa-2x text-primary" src="{{ service.cover.url }}" alt="{{ service.title }}">
+                            </div>
+                        </div>
+                        <h5 class="mb-3">{{ service.title }}</h5>
+                        <p class="text-body mb-0">{{ service.smol_description }}</p>
+                    </a>
+                </div>
 
+                <!-- Modal -->
+                <div class="modal fade" id="serviceModal{{ service.id }}" tabindex="-1" aria-labelledby="serviceModalLabel{{ service.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="serviceModalLabel{{ service.id }}">{{ service.title }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    <p>{{ service.description }}</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Service End -->
 
         <!-- Testimonial Start -->
         <div class="container-xxl testimonial my-5 py-5 bg-dark wow zoomIn" data-wow-delay="0.1s">
