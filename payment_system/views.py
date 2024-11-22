@@ -5,7 +5,7 @@ from .models import PaymentMethod, HotelPaymentApplication
 
 # главная страница оплаты
 def payment_system_veu(request, pk):
-    tour = get_object_or_404(HotelRoom, id=pk)
+    hotel_room = get_object_or_404(HotelRoom, id=pk)
     payment_method = PaymentMethod.objects.all()
 
     if request.method == "POST":
@@ -15,7 +15,7 @@ def payment_system_veu(request, pk):
             method_payment = request.POST.get("method_payment")
 
             tour_payment_application = HotelPaymentApplication(
-                tour=tour,
+                hotel_room=hotel_room,
                 user=request.user,
                 payment_method=method_payment,
                 payment_check=payment_check
@@ -31,7 +31,7 @@ def payment_system_veu(request, pk):
         template_name="payment_system/payment_system.html",
         context={
             "payment_methods": payment_method,
-            "tour": tour,
+            "hotel_room": hotel_room,
         }
     )
 

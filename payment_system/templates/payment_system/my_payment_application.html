@@ -1,55 +1,64 @@
 {% extends 'radical.html' %}
 {% load static %}
 
-{% block contend %}2
+{% block contend %}
 <style>
     .status-button a {
-  font-size: 15px;
-  color: #00bdfe;
-  background-color: white;
-  border: 1px solid #00bdfe;
-  padding: 10px 30px;
-  display: inline-block;
-  border-radius: 10px;
-  font-weight: 500;
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
-  transition: all .3s;
-}
+        font-size: 15px;
+        color: #fff;
+        background-color: white;
+        border: 1px solid #00bdfe;
+        padding: 10px 30px;
+        display: inline-block;
+        border-radius: 10px;
+        font-weight: 500;
+        text-transform: capitalize;
+        letter-spacing: 0.5px;
+        transition: all .3s;
+    }
+    .card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
 </style>
 <br>
 <br>
 <br>
-<br>
-    <div class="container">
-        <div class="row">
+<div class="container">
+    <div class="row">
         {% for application in applications %}
-            <div class="col-lg-4">
-                <div class="pricing-item">
-                    <img src="{{ application.tour.cover.url }}" alt="">
-                    <h4>{{ application.tour }}</h4>
-                    <ul class="first-plan">
-                        <li>Способ оплаты: {{ application.payment_method }}</li>
-                        <li>{{ application.create_date }}</li>
-                    </ul>
-                    <span class="price">$25 USD</span>
-                    {% if application.status == 'in_progress' %}
-                    <div class="status-button">
-                        <a href="#" style="background-color: yellow;">{{ application.get_status_display }}</a>
+            <div class="col-lg-4 col-md-6">
+                <div class="card mb-4">
+                    <img src="{{ application.hotel_room.cover.url }}" class="card-image" alt="Room Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ application.hotel_room }}</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>Способ оплаты:</strong> {{ application.payment_method }}</li>
+                            <li><strong>Дата создания:</strong> {{ application.create_date }}</li>
+                        </ul>
+                        <span class="price">${{application.hotel_room.prise}} USD</span>
+
+                        {% if application.status == 'in_progress' %}
+                            <div class="status-button">
+                                <a href="#" style="background-color: yellow;">{{ application.get_status_display }}</a>
+                            </div>
+                        {% elif application.status == 'denied' %}
+                            <div class="status-button">
+                                <a href="#" style="background-color: red;">{{ application.get_status_display }}</a>
+                            </div>
+                        {% else %}
+                            <div class="status-button">
+                                <a href="#" style="background-color: green;">{{ application.get_status_display }}</a>
+                            </div>
+                        {% endif %}
                     </div>
-                    {% elif application.status == 'denied' %}
-                    <div class="status-button">
-                        <a href="#" style="background-color: red">{{ application.get_status_display }}</a>
-                    </div>
-                    {% else %}
-                    <div class="status-button" >
-                        <a href="#" style="background-color: green">{{ application.get_status_display }}</a>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
         {% endfor %}
-        </div>
     </div>
-
+</div>
+<br>
+<br>
+<br>
 {% endblock %}

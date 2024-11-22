@@ -1,0 +1,72 @@
+{% extends 'radical_crm.html' %}
+{% load static %}
+
+{% block contend %}
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <br>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Номера в отеле</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th scope="col">Номер</th>
+              <th scope="col">Категория</th>
+              <th scope="col">Цена</th>
+              <th scope="col">Статус</th>
+              <th scope="col">Действие</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for room in rooms %}
+              <tr>
+                <td>{{ room.number_room_hotel }}</td>
+                <td>{{ room.category }}</td>
+                <td>{{ room.prise }} сом</td>
+                <td>
+                  <form method="post" action="{% url 'hotel_room_update_status' room.id %}">
+                    {% csrf_token %}
+                    <select class="form-select" name="status" onchange="this.form.submit()">
+                      <option selected>{{ room.get_status_display }}</option>
+                      <option value="1">Свободен</option>
+                      <option value="2">Занят</option>
+                    </select>
+                  </form>
+                </td>
+                <td>
+                  <a href="{{ room.cover.url }}" target="_blank">
+                    <button class="btn btn-info">Посмотреть</button>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination">
+    <span class="step-links">
+      {% if rooms.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ rooms.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ rooms.number }} of {{ rooms.paginator.num_pages }}.
+      </span>
+
+      {% if rooms.has_next %}
+        <a href="?page={{ rooms.next_page_number }}">next</a>
+        <a href="?page={{ rooms.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+</div>
+
+{% endblock %}

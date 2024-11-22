@@ -1,4 +1,5 @@
 from django.db import models
+from galleryfield.fields import GalleryField
 
 
 class Category(models.Model):
@@ -46,7 +47,8 @@ class HotelRoom(models.Model):
         choices=(
             (1,"Свободен"),
             (2,"Занят"),
-        )
+        ),
+        default=1
     )
     create_date = models.DateTimeField(
         auto_now_add=True,
@@ -60,22 +62,6 @@ class HotelRoom(models.Model):
     class Meta:
         verbose_name = "Номер"
         verbose_name_plural = "Намера"
-
-class HotelRoomImage(models.Model):
-    hotel_room = models.ForeignKey(
-        HotelRoom,
-        on_delete=models.CASCADE,
-        related_name="image_hotel",
-        verbose_name="фото номера"
-    )
-    image = models.ImageField(
-        upload_to="media/photo_hotel_room",
-        verbose_name="фото"
-    )
-    uploaded_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Дата создания"
-    )
 
 class Services(models.Model):
     title = models.CharField(

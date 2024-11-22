@@ -54,20 +54,21 @@
             <h6 class="section-title text-center text-primary text-uppercase">Категория</h6>
             <h1 class="mb-5"><span class="text-primary text-uppercase">{{ hotel_room_ditail.category }}</span></h1> <!-- категория объекта -->
         </div>
-        <div class="row g-5">
-            <div class="col-lg-6">
-                <div class="image-container">
-                    {% for image in image_hotel_room %}
-                        <!-- Отображаем каждое изображение с нужным размером -->
-                        <div class="image-item">
-                            <img class="img-fluid rounded image-frame image-small wow zoomIn" data-wow-delay="0.1s" src="{{ image.image.url }}"> <!-- Изображение с маленьким размером -->
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+        <h5>описание</h5>
+        <p>{{ hotel_room_ditail.description }}</p>
     </div>
 </div>
+<h3>
+    <a href="{% url 'payment_system' hotel_room_ditail.id %}">
+        Забронировать
+    </a>
+</h3>
 <!-- Booking End -->
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 {% endblock %}

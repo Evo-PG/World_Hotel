@@ -24,4 +24,9 @@ urlpatterns = [
     path('', include("main.urls")),
     path('user/', include("user.urls")),
     path('payment/', include("payment_system.urls")),
+    path('crm/', include("crm.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,76 @@
+{% extends 'radical_crm.html' %}
+{% load static %}
+
+
+{% block contend %}
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <br>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Заявки на оплату</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th scope="col">ФИО</th>
+            <th scope="col">Тур</th>
+            <th scope="col">Способ оплаты</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">статус</th>
+            <th scope="col">чек</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for application in applications %}
+          <tr>
+            <td>{{ application.user.full_name }}</td>
+            <td>{{ application.tour }}</td>
+            <td>{{ application.payment_method }}</td>
+            <td>{{ application.create_date|date:"d.m.Y" }}</td>
+            <td>
+              <form method="post" action="{% url 'payment_request_update_statys' application.id %}">
+                {% csrf_token %}
+                <select class="form-select" aria-label="Default select example" onchange="this.form.submit()" name="statys">
+                  <option selected>{{application.get_status_display}}</option>
+                  {% for payment_choice in payment_choices %}
+                  <option value="{{ payment_choice.value }}">{{ payment_choice.label }}</option>
+                  {% endfor %}
+                </select>
+              </form>
+            </td>
+            <td>
+              <a href="{{ payment_check.url }}" download="{{ application.payment_check }}">
+                Скачать чек
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    <div class="pagination">
+      <span class="step-links">
+          {% if page_obj.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">next</a>
+              <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+  </div>
+</div>
+
+{% endblock %}
+

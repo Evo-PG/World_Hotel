@@ -73,7 +73,7 @@
           <strong>Или оплата через номер лицевого счота:</strong>
           <strong>Номер счота: {{ payment_method.person_account }}</strong>
           <br>
-          <form action="{% url 'payment_system' tour.id %}" method="post" enctype="multipart/form-data">
+          <form action="{% url 'payment_system' hotel_room.id %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               <label>Прикрепите чек:</label>
               <input name="check" type="file" id="check" />

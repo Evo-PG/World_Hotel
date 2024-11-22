@@ -103,18 +103,19 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url 'index' %}" class="nav-item nav-link active">Главная</a>
-                            <a href="about.html" class="nav-item nav-link">About</a>
-                            <a href="{% url 'create_hotel_room' %}" class="nav-item nav-link">Добавить номер</a>
-                            <a href="room.html" class="nav-item nav-link">Rooms</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="booking.html" class="dropdown-item">Booking</a>
-                                    <a href="team.html" class="dropdown-item">Our Team</a>
-                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                             {% if request.user.status == 2 or request.user.is_admin %}
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Добавление и crm</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                    <li><a class="dropdown-item" href="{% url 'create_category' %}">Создать категорию</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'create_hotel_room' %}">Добавить номер</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'add_services' %}">Добавить сервис</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'dashboard' %}">CRM</a></li>
+                                    </div>
                                 </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            {% endif %}
+                            <a href="{% url 'my_payment_applications' %}" class="nav-item nav-link">Мои заявки на оплату</a>
+                            <a href="{% url 'event_list' %}" class="nav-item nav-link">Каталог Намеров</a>
                         </div>
 
                         <!-- Условие для отображения имени пользователя -->
@@ -249,10 +250,7 @@
     {% block contend %}
 
     {% endblock %}
-    <br>
-    <br>
-    <br>
-    <br>
+
             <!-- Footer Start -->
         <div class="container-fluid bg-dark text-light footer wow fadeIn" data-wow-delay="0.1s">
             <div class="container pb-5">

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-augnbjs-$uf^1yc2fe6=rdgyv#l#khgik^#28_$jy#08tf_-lw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'main',
     'user',
     'payment_system',
+    'galleryfield',
+    'sorl.thumbnail',
+    'crm'
 ]
 
 MIDDLEWARE = [
